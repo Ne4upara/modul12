@@ -1,42 +1,74 @@
 package ua.goit.sergey.modul12;
 
-class A extends Thread {
-    public void run() {
-        System.out.print("fizz, ");
-    }
-}
-class B extends Thread {
-    public void run() {
-        System.out.print("buzz, ");
-    }
-}
-class C extends Thread {
-    public void run() {
-        System.out.print("fizzbuzz, ");
-    }
-}
+import java.util.ArrayList;
+
 public class Task2 {
 
-    public static void main(String[] args) throws Exception {
+        static ArrayList list = new ArrayList();
+        static boolean flag = true;
+        static int n = 15;
+        public static void main(String[] args) throws InterruptedException {
 
-        getNumber(30);
-    }
+            Thread fizzThread = new Thread(() -> fizz());
+            Thread buzzThread = new Thread(() -> buzz());
+            Thread fizzBuzzThread = new Thread(() -> fizzBuzz());
+            Thread numberThread = new Thread(() -> number());
 
-    private static void getNumber (int n) throws InterruptedException {
-        for (int i = 1; i <= n; i++) {
+            fizzThread.start();
+            buzzThread.start();
+            fizzBuzzThread.start();
+            numberThread.start();
+
+            fizzThread.join();
+            buzzThread.join();
+            fizzBuzzThread.join();
+            numberThread.join();
+
+            print();
+        }
+
+        public static void fizz() {
+            while (!flag){
+                list.add("fizz");
+                flag =true;
+            }
+        }
+
+        public static void buzz()  {
+            while (!flag){
+                list.add("buzz");
+                flag =true;
+            }
+        }
+
+        public static void fizzBuzz() {
+            while (!flag){
+                list.add("fizzbuzz");
+                flag =true;
+            }
+        }
+
+        public synchronized static void number() {
+            for (int i = 1; i <= n; i++) {
+
                 if (i % 3 == 0 && i % 5 == 0) {
-                    C threadC = new C();
-                    threadC.start();
-                    threadC.join();}
-                else if (i % 5 == 0) {
-                    B threadB = new B();
-                    threadB.start();
-                    threadB.join();}
-                else if (i % 3 == 0) {
-                    A threadA = new A();
-                    threadA.start();
-                    threadA.join();}
-                else {System.out.print(i + ", ");}
+                    flag =false;
+                    fizzBuzz();
+                } else if (i % 3 == 0) {
+                    flag =false;
+                    fizz();
+                } else if (i % 5 == 0) {
+                    flag =false;
+                    buzz();
+                } else {
+                    list.add(String.valueOf(i));
+                }
+            }
+        }
+
+        public static void print(){
+            for (Object arr : list){
+                System.out.println(arr);
+            }
         }
     }
-}
