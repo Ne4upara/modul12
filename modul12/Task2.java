@@ -48,7 +48,7 @@ public class Task2 {
             }
         }
 
-        public synchronized static void number() {
+        public static void number() {
             for (int i = 1; i <= n; i++) {
 
                 if (i % 3 == 0 && i % 5 == 0) {
